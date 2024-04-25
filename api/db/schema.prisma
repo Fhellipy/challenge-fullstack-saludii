@@ -5,7 +5,7 @@
 // https://www.prisma.io/docs/orm/prisma-migrate
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,11 +14,13 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+
+model Task {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
 }
+

@@ -1,4 +1,5 @@
 import dns from 'dns'
+import { resolve } from 'node:path'
 
 import type { UserConfig } from 'vite'
 import { defineConfig } from 'vite'
@@ -11,6 +12,22 @@ dns.setDefaultResultOrder('verbatim')
 
 const viteConfig: UserConfig = {
   plugins: [redwood()],
+  resolve: {
+    alias: [
+      {
+        find: '@pages',
+        replacement: resolve('./src/pages'),
+      },
+      {
+        find: '@modules',
+        replacement: resolve('./src/modules'),
+      },
+      {
+        find: '@routes',
+        replacement: resolve('./src/routes'),
+      },
+    ],
+  },
 }
 
 export default defineConfig(viteConfig)
