@@ -11,11 +11,12 @@ export const schema = gql`
   enum TaskStatus {
     PENDING
     COMPLETED
+    ALL
   }
 
   type Query {
-    tasks: [Task!]!
-    tasksByStatus(status: TaskStatus!): [Task!]!
+    tasks(status: TaskStatus!): [Task!] @skipAuth
+    task(id: String!): Task @skipAuth
   }
 
   input CreateTaskInput {
@@ -30,8 +31,8 @@ export const schema = gql`
   }
 
   type Mutation {
-    createTask(input: CreateTaskInput!): Task!
-    updateTask(id: String!, input: UpdateTaskInput!): Task!
-    deleteTask(id: String!): Task!
+    createTask(input: CreateTaskInput!): Task! @skipAuth
+    updateTask(id: String!, input: UpdateTaskInput!): Task! @skipAuth
+    deleteTask(id: String!): Task @skipAuth
   }
 `;
