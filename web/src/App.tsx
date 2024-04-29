@@ -1,9 +1,10 @@
-import Routes from 'src/Routes'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web';
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo';
+import Routes from 'src/Routes';
 
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+import "src/styles/global.css";
 
-import FatalErrorPage from 'src/pages/FatalErrorPage/FatalErrorPage'
+import FatalErrorPage from 'src/pages/FatalErrorPage/FatalErrorPage';
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
