@@ -14,7 +14,6 @@ generator client {
   binaryTargets = "native"
 }
 
-
 model Task {
   id           String   @id @default(uuid())
   title        String
@@ -22,4 +21,7 @@ model Task {
   status       String   @default("PENDING")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  taskId       String?  @unique
+  task         Task?    @relation("PrevPosition", fields: [taskId], references: [id])
+  prevPosition Task?    @relation("PrevPosition")
 }
