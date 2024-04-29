@@ -5,15 +5,20 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { BubbleMenu, type Editor as EditorType } from "@tiptap/react"
 import { BoldIcon, Heading1Icon, Heading2Icon, Heading3Icon, ItalicIcon, LinkIcon, UnderlineIcon } from "lucide-react"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { BubbleButton } from "./BubbleButton"
 
 type Props = {
-  editor?: EditorType;
+  editor: EditorType;
 }
 
 export function BubbleMenuComponent({ editor }: Props) {
-  if(!editor) return null;
+
+  const isEditor = useMemo(() => editor !== null, [editor])
+
+  if (!isEditor) {
+    return null
+  }
 
   return (
     <BubbleMenu
@@ -77,8 +82,6 @@ export function BubbleMenuComponent({ editor }: Props) {
 
 
 export function ModalLink({ editor }: Props) {
-
-
   const [open, setOpen] = useState(false);
   const [link, setLink] = useState("");
 
@@ -104,7 +107,6 @@ export function ModalLink({ editor }: Props) {
     }
   }, [editor])
 
-  if(!editor) return null;
 
   return (
       <React.Fragment>
