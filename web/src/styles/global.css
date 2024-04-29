@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --foreground: 0, 0%, 100%;
+    --background: 0, 0%, 5.4%;
+    --primary: 0, 0%, 0.15%;
+
+    --destructive: 0 70% 48%;
+    --destructive-foreground: 210 40% 98%;
+
+    --radius: 1rem;
+    --border: 215 16% 47%;
+  }
+}
