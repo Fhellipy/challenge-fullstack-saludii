@@ -17,9 +17,9 @@ export default function TasksPage() {
 
 
   return (
-    <main className='bg-background w-full h-screen m-auto p-10'>
-      <div className="h-full bg-zinc-950 w-full grid overflow-hidden grid-cols-[16rem_1fr] rounded-lg">
-       <aside className='bg-zinc-900 h-full border-r text-foreground p-4'>
+    <main className='bg-zinc-950 w-full h-screen m-auto p-10'>
+      <div className="h-full bg-zinc-800 w-full grid overflow-hidden grid-cols-[16rem_1fr] rounded-lg">
+       <aside className='bg-zinc-700 h-full border-r text-foreground p-4'>
        </aside>
 
        <section className='text-foreground p-4 gap-2 flex flex-col overflow-auto'>
