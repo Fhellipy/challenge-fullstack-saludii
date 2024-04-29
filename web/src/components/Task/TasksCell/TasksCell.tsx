@@ -1,7 +1,8 @@
-
 import { CellFailureProps, CellSuccessProps, TypedDocumentNode } from '@redwoodjs/web';
+import { CircleAlertIcon } from 'lucide-react';
+import Tasks from 'src/components/Task/Tasks';
 import type { TasksQuery, TasksQueryVariables } from 'types/graphql';
-import Tasks from '@components/Task/Tasks';
+
 
 export const QUERY:TypedDocumentNode<
   TasksQuery,
@@ -19,12 +20,25 @@ export const QUERY:TypedDocumentNode<
   }
 `;
 
-export const Loading = () => <div>Loading...</div>;
+export const Loading = () => (
+  <div className="z-50 flex h-full w-full flex-col items-center justify-center">
+    <div  className='inline-block animate-spin rounded-full border-blue-600 border-b-transparent h-14 w-14 border-[5px]'/>
+  </div>
+)
 
-export const Empty = () => <div>Tasks not found</div>;
+
+export const Empty = () => (
+  <div className='flex flex-col gap-2 items-center h-full justify-center text-orange-600'>
+    <CircleAlertIcon className='w-16 h-16' />
+    <div className='font-black'>Nenhuma tarefa encontrada</div>
+  </div>
+)
 
 export const Failure = ({ error }: CellFailureProps<TasksQueryVariables>) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className='flex flex-col gap-2 items-center h-full justify-center text-destructive'>
+    <CircleAlertIcon className='w-16 h-16' />
+    <div className='font-black'>{error.message}</div>
+  </div>
 );
 
 export const Success = ({ tasks }: CellSuccessProps<TasksQuery, TasksQueryVariables>) => {
@@ -32,7 +46,7 @@ export const Success = ({ tasks }: CellSuccessProps<TasksQuery, TasksQueryVariab
   console.log("tasks", tasks);
 
   return (
-    <div>
+    <div className='h-full'>
       <h2>TaskList</h2>
 
       <Tasks tasks={tasks} />
