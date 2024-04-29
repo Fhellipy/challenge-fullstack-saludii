@@ -11,15 +11,41 @@
     ]
   },
   "dependencies": {
+    "-": "^0.0.1",
+    "@dnd-kit/core": "^6.1.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.15",
     "@redwoodjs/forms": "7.4.3",
     "@redwoodjs/router": "7.4.3",
     "@redwoodjs/web": "7.4.3",
+    "@tiptap/extension-bubble-menu": "^2.3.0",
+    "@tiptap/extension-document": "^2.3.0",
+    "@tiptap/extension-floating-menu": "^2.3.0",
+    "@tiptap/extension-link": "^2.3.0",
+    "@tiptap/extension-paragraph": "^2.3.0",
+    "@tiptap/extension-task-item": "^2.3.0",
+    "@tiptap/extension-task-list": "^2.3.0",
+    "@tiptap/extension-text": "^2.3.0",
+    "@tiptap/extension-underline": "^2.3.0",
+    "@tiptap/pm": "^2.3.0",
+    "@tiptap/react": "^2.3.0",
+    "@tiptap/starter-kit": "^2.3.0",
+    "lucide-react": "^0.376.0",
+    "postcss-preset-env": "^9.5.9",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@redwoodjs/vite": "7.4.3",
+    "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19"
+    "@types/react-dom": "^18.2.19",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "postcss-import": "^16.1.0",
+    "postcss-nesting": "^12.1.2",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.3"
   }
 }
