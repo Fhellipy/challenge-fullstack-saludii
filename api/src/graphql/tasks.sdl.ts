@@ -6,6 +6,7 @@ export const schema = gql`
     status: TaskStatus!
     createdAt: DateTime!
     updatedAt: DateTime!
+    prevPosition: String
   }
 
   enum TaskStatus {
@@ -22,12 +23,14 @@ export const schema = gql`
   input CreateTaskInput {
     title: String!
     description: String!
+    prevPosition: String
   }
 
   input UpdateTaskInput {
     title: String
     description: String
     status: TaskStatus
+    prevPosition: String
   }
 
   type Mutation {

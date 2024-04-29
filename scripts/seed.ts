@@ -18,7 +18,7 @@ export default async () => {
           })
         )
       } else {
-        console.log('Users already seeded')
+        console.log('Tasks already seeded')
       }
   }  catch (error) {
     console.warn('Please define your seed data.')
