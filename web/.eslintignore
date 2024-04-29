@@ -1,0 +1,10 @@
+node_modules
+yarn.lock
+*-lock.json
+*/javascript/*
+coverage
+.next'
+public
+next-env.d.ts
+*.yml
+*.yaml
