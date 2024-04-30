@@ -10,7 +10,7 @@ export const standard = defineScenario<Prisma.TaskCreateArgs>({
           status: "PENDING",
           createdAt: "2024-04-26T13:49:15.880Z",
           updatedAt: "2024-04-26T13:49:15.880Z",
-          prevPosition: null
+          taskIdPrev: null
         }
       },
       two: {
@@ -21,7 +21,7 @@ export const standard = defineScenario<Prisma.TaskCreateArgs>({
           status: "PENDING",
           createdAt: "2024-04-26T13:49:16.821Z",
           updatedAt: "2024-04-26T13:49:16.821Z",
-          prevPosition: "2b15ecdf-4757-4437-b2df-60bba0973206",
+          taskIdPrev: "2b15ecdf-4757-4437-b2df-60bba0973206",
         }
       },
       tree :{
@@ -32,7 +32,7 @@ export const standard = defineScenario<Prisma.TaskCreateArgs>({
           status: "PENDING",
           createdAt: "2024-04-26T13:49:17.507Z",
           updatedAt: "2024-04-26T13:49:17.507Z",
-          prevPosition: "2383037b-486f-449a-bd55-f0cffb91acae",
+          taskIdPrev: "2383037b-486f-449a-bd55-f0cffb91acae",
         }
       }
     },
