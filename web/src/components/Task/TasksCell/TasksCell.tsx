@@ -16,6 +16,7 @@ export const QUERY:TypedDocumentNode<
       status
       createdAt
       updatedAt
+      taskIdPrev
     }
   }
 `;
