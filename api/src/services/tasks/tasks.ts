@@ -1,8 +1,8 @@
 
-import type { Prisma } from '@prisma/client';
+import type { Prisma, Task } from '@prisma/client';
 import { db } from 'src/lib';
 
-export const tasks =  async ({ status }) => {
+export const tasks = async ({ status }) => {
   let tasks = [];
 
   if (status === 'ALL') {
@@ -10,12 +10,15 @@ export const tasks =  async ({ status }) => {
   } else {
     tasks = await db.task.findMany({
       where: { status },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
+  if(status !== 'ALL') return tasks;
+
   const sortedTasks = [];
 
-  const sortTasksRecursive = (task) => {
+  const sortTasksRecursive = (task: Task) => {
     sortedTasks.push(task);
     const dependentTasks = tasks.filter((t) => t.taskIdPrev === task.id);
     dependentTasks.forEach((t) => sortTasksRecursive(t));
@@ -88,7 +91,22 @@ export const updatePositionTasks = ({ input }: UpdatePositionTasksArgs) => {
   )
 }
 
-export const deleteTask = ({ id }) => {
+export const deleteTask =  async ({ id }) => {
+  const task = await  db.task.findUnique({
+    where: { id },
+  })
+
+  const nextTask = await db.task.findMany({
+    where: { taskIdPrev: id },
+  })
+
+  if (nextTask.length > 0) {
+    await db.task.update({
+      where: { id: nextTask[0].id },
+      data: { taskIdPrev: task.taskIdPrev },
+    })
+  }
+
   return db.task.delete({
     where: { id },
   })
