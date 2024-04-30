@@ -1,6 +1,6 @@
 
-import type { Prisma } from '@prisma/client'
-import { db } from 'src/lib'
+import type { Prisma } from '@prisma/client';
+import { db } from 'src/lib';
 
 export const tasks =  ({ status }) => {
   if(status === 'ALL') {
@@ -49,6 +49,29 @@ export const updateTask = ({ id, input }: UpdateTaskArgs) => {
   })
 }
 
+type UpdatePositionTasksArgs = {
+  input: {
+    tasks: {
+      id: string;
+      taskIdPrev: string | null;
+    }[];
+  };
+};
+
+export const updatePositionTasks = ({ input }: UpdatePositionTasksArgs) => {
+  if(!input.tasks) {
+    throw new Error('Tarefas não encontradas')
+  }
+
+  return Promise.all(
+    input.tasks?.map((task) => {
+      return db.task.update({
+        where: { id: task.id },
+        data: { taskIdPrev: task.taskIdPrev },
+      })
+    })
+  )
+}
 
 export const deleteTask = ({ id }) => {
   return db.task.delete({
