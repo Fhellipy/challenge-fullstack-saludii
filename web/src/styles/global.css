@@ -5,13 +5,30 @@
 @layer base {
   :root {
     --foreground: 0, 0%, 100%;
-    --background: 0, 0%, 5.4%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --primary: 0, 0%, 0.15%;
 
     --destructive: 0 70% 48%;
     --destructive-foreground: 210 40% 98%;
 
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
     --radius: 1rem;
     --border: 215 16% 47%;
+  }
+}
+
+@layer utilities {
+  #form-control > div {
+    @apply rounded-md;
+  }
+
+  #demo-simple-select {
+    @apply rounded-md p-4 bg-background text-foreground shadow-lg;
   }
 }
