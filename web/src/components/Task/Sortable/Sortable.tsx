@@ -1,22 +1,11 @@
 import { DndContext, DragEndEvent, DragStartEvent, KeyboardSensor, PointerSensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
+import { TasksQuery } from "types/graphql";
 import { SortableItem } from "./SortableItem";
 
-
-export type TaskItem = {
-  id: string;
-  title: string;
-  description: string;
-  status: "PENDING" | "COMPLETED" | "ALL";
-  createdAt: string;
-  updatedAt: string;
-  prevPosition: string | null;
-}
-
-
 type SortableProps = {
-  data: TaskItem[];
+  data: TasksQuery['tasks'];
 };
 
 export function Sortable({ data = []}: SortableProps) {
