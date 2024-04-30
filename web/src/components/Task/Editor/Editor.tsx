@@ -7,7 +7,6 @@ import StarterKit from "@tiptap/starter-kit"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BubbleMenuComponent } from './BubbleMenuComponent'
 import "./editor.css"
-import { initialContent } from "./initialContent"
 
 const extensions = [
   StarterKit,
@@ -25,7 +24,11 @@ const extensions = [
   }),
 ]
 
-export function Editor() {
+type EditorProps = {
+  initialContent: string;
+}
+
+export function Editor({ initialContent } : EditorProps ) {
   const [editable, setEditable] = useState(false);
   const editorRef = useRef(null);
 
@@ -71,7 +74,7 @@ export function Editor() {
 
 
   return (
-    <div className="border" ref={editorRef}>
+    <div ref={editorRef} className="w-full">
 
       {editor && (
         <FloatingMenu editor={editor}
@@ -107,7 +110,7 @@ export function Editor() {
 
       <BubbleMenuComponent editor={editor} />
 
-      <EditorContent editor={editor} className="max-w-[700px] mx-auto prose prose-invert prose-emerald"/>
+      <EditorContent editor={editor} className="w-full p-2 max-w-[700px] prose prose-invert prose-emerald prose-p:m-1 text-muted-foreground"/>
     </div>
   )
 }
