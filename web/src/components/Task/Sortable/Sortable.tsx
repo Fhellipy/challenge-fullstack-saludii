@@ -1,22 +1,26 @@
-import { DndContext, DragEndEvent, DragStartEvent, KeyboardSensor, PointerSensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
-import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useEffect, useState } from "react";
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, KeyboardSensor, PointerSensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
+import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 import { TasksQuery } from "types/graphql";
 import { SortableItem } from "./SortableItem";
 
 type SortableProps = {
-  data: TasksQuery['tasks'];
+  tasks: TasksQuery['tasks'];
+  handleCheckboxChange: (id: string, status: string) => void;
+  handleUpdatePositionTasks: (tasks: {id: string, taskIdPrev: string}[]) => void;
+  handleDelete: (id: string) => void;
 };
 
-export function Sortable({ data = []}: SortableProps) {
-  const [items, setItems] = useState(data);
+export function Sortable(props: SortableProps) {
+  const { tasks = [], handleCheckboxChange, handleUpdatePositionTasks, handleDelete } = props;
+
+  const [items, setItems] = useState(tasks);
   const [sortableIds, setSortableIds] = useState(
     items.map(item => item.id as UniqueIdentifier),
   );
 
-  useEffect(() => {
-    setItems(data);
-  }, [data]);
+  const [activeItem, setActiveItem] = useState<TasksQuery['tasks'][number]>();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -25,12 +29,71 @@ export function Sortable({ data = []}: SortableProps) {
     }),
   );
 
-
   function handleDragEnd({ active, over }: DragEndEvent) {
-    if (over && active.id !== over.id) {}
+    if (over && active.id !== over?.id) {
+      const activeIndex = items.findIndex(({ id }) => id === active.id);
+      const overIndex = items.findIndex(({ id }) => id === over.id);
+
+      // Reorder items
+      const newItems = arrayMove(items, activeIndex, overIndex)
+
+      newItems[activeIndex] = {
+        ...newItems[activeIndex],
+        taskIdPrev: activeIndex === 0 ? null : newItems[activeIndex - 1].id
+      }
+
+      newItems[overIndex] = {
+        ...newItems[overIndex],
+        taskIdPrev: overIndex === 0 ? null : newItems[overIndex - 1].id
+      }
+
+      if(newItems[overIndex + 1]) {
+        newItems[overIndex + 1] = {
+          ...newItems[overIndex + 1],
+          taskIdPrev: newItems[overIndex].id
+        }
+      }
+
+      if(newItems[activeIndex + 1]) {
+        newItems[activeIndex + 1] = {
+          ...newItems[activeIndex + 1],
+          taskIdPrev: newItems[activeIndex].id
+        }
+      }
+
+      // Check which items have been updated
+      const activeItem = newItems[activeIndex];
+      const overItem = newItems[overIndex];
+
+      const itemsUpdated = [
+        {id: activeItem.id, taskIdPrev: activeItem.taskIdPrev},
+        {id: overItem.id, taskIdPrev: overItem.taskIdPrev}
+      ].filter(Boolean);
+
+      const nextOverItem = newItems[overIndex + 1];
+      if(nextOverItem && !itemsUpdated.find(item => item.id === nextOverItem.id)) {
+        itemsUpdated.push({id: nextOverItem.id, taskIdPrev: nextOverItem.taskIdPrev});
+      }
+
+
+      const nextActiveItem = newItems[activeIndex + 1];
+      if(nextActiveItem && !itemsUpdated.find(item => item.id === nextActiveItem.id)) {
+        itemsUpdated.push({id: nextActiveItem.id, taskIdPrev: nextActiveItem.taskIdPrev});
+      }
+
+      handleUpdatePositionTasks(itemsUpdated);
+
+      setSortableIds(newItems.map(item => item.id as UniqueIdentifier));
+      setItems(newItems);
+      setActiveItem(undefined);
+    }
   }
 
-  function handleDragStart({ active: { id } }: DragStartEvent) {}
+  function handleDragStart({ active: { id } }: DragStartEvent) {
+    const item = items.find(item => item.id === id);
+
+    setActiveItem(item);
+  }
 
 
   return (
@@ -39,22 +102,35 @@ export function Sortable({ data = []}: SortableProps) {
       collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      // onDragMove={() => {
-      //   setSortableIds(items.map(item => item.id as UniqueIdentifier));
-      // }}
     >
        <SortableContext
           items={sortableIds}
           strategy={verticalListSortingStrategy}
        >
-         <ul
-            className="flex flex-col gap-1"
-         >
+         <ul className="flex flex-col gap-4 h-full p-3 overflow-auto">
            {items.map((item) => (
-             <SortableItem key={item.id} task={item} />
+             <SortableItem
+              key={item.id}
+              task={item}
+              handleCheckboxChange={handleCheckboxChange}
+              handleDelete={handleDelete}
+             />
            ))}
          </ul>
        </SortableContext>
+
+       {createPortal(
+          <DragOverlay>
+            {activeItem && (
+               <SortableItem
+                task={activeItem}
+                handleCheckboxChange={handleCheckboxChange}
+                handleDelete={handleDelete}
+               />
+            )}
+          </DragOverlay>,
+          document.body,
+        )}
     </DndContext>
   )
 }
