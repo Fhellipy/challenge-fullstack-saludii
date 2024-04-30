@@ -1,7 +1,7 @@
-import { CellFailureProps, CellSuccessProps, TypedDocumentNode } from '@redwoodjs/web';
+import { CellFailureProps, CellSuccessProps, TypedDocumentNode, useMutation } from '@redwoodjs/web';
 import { CircleAlertIcon } from 'lucide-react';
-import Tasks from 'src/components/Task/Tasks';
 import type { TasksQuery, TasksQueryVariables } from 'types/graphql';
+import { Sortable } from '../Sortable/Sortable';
 
 
 export const QUERY:TypedDocumentNode<
@@ -20,6 +20,37 @@ export const QUERY:TypedDocumentNode<
     }
   }
 `;
+
+const UPDATE_TASK = gql`
+  mutation updateTask(
+    $id: String!
+    $input: UpdateTaskInput!
+  ) {
+    updateTask(id: $id, input: $input) {
+      id
+    }
+  }
+`
+
+const UPDATE_POSITION_TASKS = gql`
+  mutation updatePositionTasks(
+    $input: UpdatePositionTasksInput!
+  ) {
+    updatePositionTasks(input: $input) {
+      id
+      taskIdPrev
+    }
+  }
+`
+
+const DELETE_TASK = gql`
+  mutation deleteTask($id: String!) {
+    deleteTask(id: $id) {
+      id
+    }
+  }
+`
+
 
 export const Loading = () => (
   <div className="z-50 flex h-full w-full flex-col items-center justify-center">
@@ -43,15 +74,40 @@ export const Failure = ({ error }: CellFailureProps<TasksQueryVariables>) => (
 );
 
 export const Success = ({ tasks }: CellSuccessProps<TasksQuery, TasksQueryVariables>) => {
+  const [updateTask] = useMutation(UPDATE_TASK)
+  const [updatePositionTasks] = useMutation(UPDATE_POSITION_TASKS)
 
-  console.log("tasks", tasks);
+  const [deleteTask] = useMutation(DELETE_TASK)
+
+  const handleCheckboxChange = (id: string, status: string) => {
+    updateTask({
+      variables: {
+        id,
+        input: { status }
+      }
+    })
+  }
+
+  const handleUpdatePositionTasks = (tasks: { id: string, taskIdPrev: string | null }[]) => {
+    updatePositionTasks({
+      variables: {
+        input: {
+          tasks
+        }
+      }
+    })
+  }
+
+  const handleDelete = (id: string) => {
+    deleteTask({ variables: { id } })
+  }
 
   return (
-    <div className='h-full'>
-      <h2>TaskList</h2>
-
-      <Tasks tasks={tasks} />
-    </div>
-  );
+    <Sortable
+      tasks={tasks}
+      handleCheckboxChange={handleCheckboxChange}
+      handleDelete={handleDelete}
+      handleUpdatePositionTasks={handleUpdatePositionTasks}
+    />)
 };
 
