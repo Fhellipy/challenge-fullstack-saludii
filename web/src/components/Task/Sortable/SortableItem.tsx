@@ -1,11 +1,11 @@
 import { AnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVerticalIcon } from "lucide-react";
-import { TaskItem } from "./Sortable";
+import { TasksQuery } from "types/graphql";
 
 
 type SortableItemProps = {
-  task: TaskItem;
+  task: TasksQuery['tasks'][number];
 };
 
 const animateLayoutChanges: AnimateLayoutChanges = ({
@@ -45,7 +45,9 @@ export function SortableItem({ task }: SortableItemProps) {
         </button>
       </div>
 
+    <p className="text-slate-500 font-semibold">
       {task.title}
+    </p>
     </li>
   )
 }
