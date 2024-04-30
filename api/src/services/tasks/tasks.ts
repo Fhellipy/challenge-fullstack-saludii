@@ -2,14 +2,29 @@
 import type { Prisma } from '@prisma/client';
 import { db } from 'src/lib';
 
-export const tasks =  ({ status }) => {
-  if(status === 'ALL') {
-    return db.task.findMany()
+export const tasks =  async ({ status }) => {
+  let tasks = [];
+
+  if (status === 'ALL') {
+    tasks = await db.task.findMany();
+  } else {
+    tasks = await db.task.findMany({
+      where: { status },
+    });
   }
 
-  return db.task.findMany({
-    where: { status },
-  })
+  const sortedTasks = [];
+
+  const sortTasksRecursive = (task) => {
+    sortedTasks.push(task);
+    const dependentTasks = tasks.filter((t) => t.taskIdPrev === task.id);
+    dependentTasks.forEach((t) => sortTasksRecursive(t));
+  };
+
+  const tasksWithNullPrev = tasks.filter((task) => task.taskIdPrev === null);
+  tasksWithNullPrev.forEach((task) => sortTasksRecursive(task));
+
+  return sortedTasks;
 }
 
 export const task = ({ id }: Prisma.TaskWhereUniqueInput) => {
