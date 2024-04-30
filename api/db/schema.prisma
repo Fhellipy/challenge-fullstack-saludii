@@ -21,7 +21,7 @@ model Task {
   status       String   @default("PENDING")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  taskId       String?  @unique
-  task         Task?    @relation("PrevPosition", fields: [taskId], references: [id])
-  prevPosition Task?    @relation("PrevPosition")
+  task         Task[]   @relation("PrevPosition")
+  prevPosition Task?    @relation("PrevPosition", fields: [taskIdPrev], references: [id])
+  taskIdPrev   String?
 }
