@@ -2,13 +2,13 @@ import { AnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Checkbox, IconButton } from "@mui/material";
 import { GripVerticalIcon, TrashIcon } from "lucide-react";
-import { TasksQuery } from "types/graphql";
+import { TasksQuery, UpdateTaskInput } from "types/graphql";
 import { Editor } from "../Editor/Editor";
 
 
 type SortableItemProps = {
   task: TasksQuery['tasks'][number];
-  handleCheckboxChange: (id: string, status: string) => void;
+  handleUpdateTask: (id: string, input: UpdateTaskInput) => void;
   handleDelete: (id: string) => void;
 };
 
@@ -19,7 +19,7 @@ const animateLayoutChanges: AnimateLayoutChanges = ({
 
 
 export function SortableItem(props: SortableItemProps) {
-  const { task, handleCheckboxChange, handleDelete } = props;
+  const { task, handleUpdateTask, handleDelete } = props;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: task.id, animateLayoutChanges });
@@ -44,7 +44,7 @@ export function SortableItem(props: SortableItemProps) {
       style={style}
     >
       <div className="w-full flex flex-col border-b p-2 justify-between sm:flex-row">
-        <span className="w-full flex items-center justify-between sm:w-fit">
+        <span className="w-full flex items-center justify-between">
           {statusFilter === 'Todos' && (
             <button
                type="button"
@@ -59,20 +59,48 @@ export function SortableItem(props: SortableItemProps) {
           <IconButton aria-label="delete" onClick={() => handleDelete(task.id)}>
             <TrashIcon className="text-muted-foreground" size={20}/>
           </IconButton>
+
+          <Editor
+             initialContent={task.title}
+             placeholder="Adicione um título"
+             onChange={(content) => {
+               const input: UpdateTaskInput = {
+                 title: content
+               }
+               handleUpdateTask(task.id, input)
+             }}
+           />
+
         </span>
 
         <span className="flex items-center whitespace-nowrap text-sm">
           <Checkbox id={task.id}
-            defaultChecked={task.status === 'COMPLETED'}
+            checked={task.status === 'COMPLETED'}
             onChange={ev => {
-              handleCheckboxChange(task.id, ev.target.checked ? 'COMPLETED' : 'PENDING')
+              const input: UpdateTaskInput = {
+                status: ev.target.checked ? 'COMPLETED' : 'PENDING'
+              }
+
+              handleUpdateTask(task.id, input)
             }}
           />
-          <label htmlFor={task.id}>Marcar como Concluído</label>
+          <label htmlFor={task.id} className="truncate">
+            Marcar como concluída
+          </label>
         </span>
       </div>
 
-      <Editor initialContent={task.description} />
+      <Editor
+        initialContent={task.description}
+        placeholder="Adicione uma descrição"
+        onChange={(content) => {
+          const input: UpdateTaskInput = {
+            description: content
+          }
+
+          handleUpdateTask(task.id, input)
+        }}
+      />
     </li>
   )
 }
