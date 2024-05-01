@@ -5,13 +5,17 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { socket } from 'src/lib';
 import { TaskStatus } from 'types/graphql';
 
 export default function TasksPage() {
   const [status, setStatus] = React.useState<TaskStatus>('ALL');
 
   const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as TaskStatus);
+    const status = event.target.value as TaskStatus
+
+    socket.emit('getTasks', status)
+    setStatus(status);
   };
 
 
