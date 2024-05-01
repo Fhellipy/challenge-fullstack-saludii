@@ -1,9 +1,0 @@
-{
-  "semi": true,
-  "trailingComma": "all",
-  "singleQuote": false,
-  "printWidth": 80,
-  "arrowParens": "avoid",
-  "tailwindConfig": "./tailwind.config.ts",
-  "plugins": ["prettier-plugin-tailwindcss"]
-}
