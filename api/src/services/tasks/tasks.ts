@@ -2,6 +2,7 @@
 import type { Prisma, Task } from '@prisma/client';
 import { db } from 'src/lib';
 
+
 export const tasks = async ({ status }) => {
   let tasks = [];
 
@@ -52,7 +53,7 @@ interface UpdateTaskArgs extends Prisma.TaskUpdateInput {
 }
 
 
-export const updateTask = ({ id, input }: UpdateTaskArgs) => {
+export const updateTask = async ({ id, input }: UpdateTaskArgs) => {
   const findTask = db.task.findUnique({
     where: { id },
   })
@@ -61,28 +62,29 @@ export const updateTask = ({ id, input }: UpdateTaskArgs) => {
     throw new Error('Tarefa não encontrada')
   }
 
-  return db.task.update({
+
+  const updatedTask = await db.task.update({
     where: { id },
     data: { ...input, updatedAt: new Date()},
   })
+
+  return updatedTask
 }
 
 type UpdatePositionTasksArgs = {
   input: {
-    tasks: {
-      id: string;
-      taskIdPrev: string | null;
-    }[];
-  };
+    id: string;
+    taskIdPrev: string | null;
+  }[];
 };
 
 export const updatePositionTasks = ({ input }: UpdatePositionTasksArgs) => {
-  if(!input.tasks) {
+  if(!input.length) {
     throw new Error('Tarefas não encontradas')
   }
 
   return Promise.all(
-    input.tasks?.map((task) => {
+    input?.map((task) => {
       return db.task.update({
         where: { id: task.id },
         data: { taskIdPrev: task.taskIdPrev },
