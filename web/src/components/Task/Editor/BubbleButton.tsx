@@ -7,7 +7,7 @@ type BubbleButtonProps = HTMLAttributes<HTMLButtonElement> &{
 export function BubbleButton(props: BubbleButtonProps) {
   return (
     <button
-      className="p-2 text-zinc-300 text-sm flex items-center gap-1.5 font-medium leading-none hover:text-zinc-50 hover:bg-zinc-600 data-[active=true]:text-blue-600"
+      className="p-2 text-muted-foreground text-sm flex items-center gap-1.5 font-medium leading-none hover:text-zinc-50 hover:bg-muted-foreground data-[active=true]:text-blue-600"
       {...props}
     />
   );
