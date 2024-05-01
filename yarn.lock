@@ -5399,6 +5399,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@redwoodjs/cli-data-migrate@npm:7.4.3":
+  version: 7.4.3
+  resolution: "@redwoodjs/cli-data-migrate@npm:7.4.3"
+  dependencies:
+    "@redwoodjs/babel-config": "npm:7.4.3"
+    "@redwoodjs/project-config": "npm:7.4.3"
+    chalk: "npm:4.1.2"
+    dotenv-defaults: "npm:5.0.2"
+    execa: "npm:5.1.1"
+    fs-extra: "npm:11.2.0"
+    listr2: "npm:6.6.1"
+    terminal-link: "npm:2.1.1"
+    yargs: "npm:17.7.2"
+  bin:
+    up: dist/bin.js
+  checksum: 10c0/85dc2751a6450b253ce2d33c8c674e3fcdd744bb11588bfcd96f32949f4a5edc554f3a9bcf2d40757351c219ececdea5ed162678be4db957fdfea50ab920167e
+  languageName: node
+  linkType: hard
+
 "@redwoodjs/cli-helpers@npm:7.4.3":
   version: 7.4.3
   resolution: "@redwoodjs/cli-helpers@npm:7.4.3"
@@ -9363,14 +9382,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001587":
-  version: 1.0.30001612
-  resolution: "caniuse-lite@npm:1.0.30001612"
-  checksum: 10c0/d6b405ff06f4e913bc779f9183fa68001c9d6b8526a7dd1b99c60587dd21a01aa8def3d8462cf6214f0181f1c21b9245611ff65241cf9c967fc742e86ece5065
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001599":
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001587, caniuse-lite@npm:^1.0.30001599":
   version: 1.0.30001613
   resolution: "caniuse-lite@npm:1.0.30001613"
   checksum: 10c0/3850bf9281fd9c8302559f3d332138138ead965a933d6f253ef510ffce6ee52cb120182de1a57ba63faa203e583a4416a9d23995f5427c68067dec87c2ea664a
@@ -19580,14 +19592,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^18.0.0":
-  version: 18.2.0
-  resolution: "react-is@npm:18.2.0"
-  checksum: 10c0/6eb5e4b28028c23e2bfcf73371e72cd4162e4ac7ab445ddae2afe24e347a37d6dc22fae6e1748632cd43c6d4f9b8f86dcf26bf9275e1874f436d129952528ae0
-  languageName: node
-  linkType: hard
-
-"react-is@npm:^18.2.0":
+"react-is@npm:^18.0.0, react-is@npm:^18.2.0":
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
@@ -20243,6 +20248,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@prisma/client": "npm:^5.13.0"
+    "@redwoodjs/cli-data-migrate": "npm:7.4.3"
     "@redwoodjs/core": "npm:7.4.3"
     "@redwoodjs/project-config": "npm:7.4.3"
     prisma: "npm:^5.13.0"
