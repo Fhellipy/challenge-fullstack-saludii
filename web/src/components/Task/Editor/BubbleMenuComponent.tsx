@@ -23,7 +23,7 @@ export function BubbleMenuComponent({ editor }: Props) {
   return (
     <BubbleMenu
         editor={editor}
-        className="bg-zinc-700 border border-zinc-600 rounded-lg shadow-xl shadow-black/20 overflow-hidden flex divide-x divide-zinc-600"
+        className="bg-card rounded-lg shadow-custom overflow-hidden flex divide-x divide-muted-foreground"
     >
       <BubbleButton
         title="Texto"
@@ -32,6 +32,7 @@ export function BubbleMenuComponent({ editor }: Props) {
        >
          Texto
        </BubbleButton>
+
        <BubbleButton
         title="Negrito"
         data-active={editor.isActive("bold")}
@@ -39,6 +40,7 @@ export function BubbleMenuComponent({ editor }: Props) {
        >
         <BoldIcon size={20} />
        </BubbleButton>
+
        <BubbleButton
         title="Itálico"
         data-active={editor.isActive("italic")}
@@ -46,6 +48,7 @@ export function BubbleMenuComponent({ editor }: Props) {
        >
         <ItalicIcon size={20} />
        </BubbleButton>
+
        <BubbleButton
         title="Sublinhado"
         data-active={editor.isActive("underline")}
@@ -53,7 +56,9 @@ export function BubbleMenuComponent({ editor }: Props) {
        >
         <UnderlineIcon size={20} />
        </BubbleButton>
+
        <ModalLink editor={editor} />
+
        <BubbleButton
         title="Título 1"
         data-active={editor.isActive("heading", { level: 1 })}
@@ -61,6 +66,7 @@ export function BubbleMenuComponent({ editor }: Props) {
        >
           <Heading1Icon size={20} />
        </BubbleButton>
+
        <BubbleButton
         title="Título 2"
         data-active={editor.isActive("heading", { level: 2 })}
@@ -68,6 +74,7 @@ export function BubbleMenuComponent({ editor }: Props) {
        >
           <Heading2Icon size={20} />
        </BubbleButton>
+
        <BubbleButton
         title="Título 3"
         data-active={editor.isActive("heading", { level: 3 })}
@@ -97,7 +104,6 @@ export function ModalLink({ editor }: Props) {
         editor.chain().focus().unsetLink().run()
       }
     }
-
     setOpen(false);
   };
 
@@ -119,6 +125,7 @@ export function ModalLink({ editor }: Props) {
        </BubbleButton>
 
       <Dialog
+        id='modal-link'
         open={open}
         onClose={handleClose}
       >
