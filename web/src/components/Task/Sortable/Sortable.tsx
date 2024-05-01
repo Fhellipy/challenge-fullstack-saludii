@@ -1,19 +1,27 @@
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, KeyboardSensor, PointerSensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { CircleAlertIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { TasksQuery } from "types/graphql";
+import { CreateTaskInput, TasksQuery, UpdateTaskInput } from "types/graphql";
 import { SortableItem } from "./SortableItem";
 
 type SortableProps = {
   tasks: TasksQuery['tasks'];
-  handleCheckboxChange: (id: string, status: string) => void;
+  handleCreateTask: (input: CreateTaskInput) => void;
+  handleUpdateTask: (id: string, input: UpdateTaskInput) => void;
   handleUpdatePositionTasks: (tasks: {id: string, taskIdPrev: string}[]) => void;
   handleDelete: (id: string) => void;
 };
 
 export function Sortable(props: SortableProps) {
-  const { tasks = [], handleCheckboxChange, handleUpdatePositionTasks, handleDelete } = props;
+  const {
+     tasks = [],
+     handleUpdateTask,
+     handleUpdatePositionTasks,
+     handleDelete,
+     handleCreateTask
+    } = props;
 
   const [items, setItems] = useState(tasks);
   const [sortableIds, setSortableIds] = useState(
@@ -21,6 +29,12 @@ export function Sortable(props: SortableProps) {
   );
 
   const [activeItem, setActiveItem] = useState<TasksQuery['tasks'][number]>();
+
+
+  useEffect(() => {
+    setItems(tasks);
+    setSortableIds(tasks.map(item => item.id as UniqueIdentifier));
+  }, [tasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -95,6 +109,15 @@ export function Sortable(props: SortableProps) {
     setActiveItem(item);
   }
 
+  const lastItem = items[items.length - 1];
+
+
+  const scrollToBottom = () => {
+    const element = document.querySelector('ul');
+    if(element) {
+      element.scrollTop = element.scrollHeight;
+    }
+  }
 
   return (
     <DndContext
@@ -107,16 +130,32 @@ export function Sortable(props: SortableProps) {
           items={sortableIds}
           strategy={verticalListSortingStrategy}
        >
-         <ul className="flex flex-col gap-4 h-full p-3 overflow-auto">
+         <ul className="flex flex-col gap-4 h-full p-3 overflow-auto scroll-smooth">
            {items.map((item) => (
              <SortableItem
               key={item.id}
               task={item}
-              handleCheckboxChange={handleCheckboxChange}
+              handleUpdateTask={handleUpdateTask}
               handleDelete={handleDelete}
              />
            ))}
+
+           {items.length === 0 && (
+               <div className='flex flex-col gap-2 items-center h-full justify-center text-emerald-500'>
+               <CircleAlertIcon className='w-16 h-16' />
+               <div className='font-black'>Nenhuma tarefa encontrada</div>
+             </div>
+          )}
          </ul>
+
+         <button
+          className="bg-primary text-card p-2 rounded-md font-black"
+          onClick={() => {
+            handleCreateTask({ title: '' , description: '', taskIdPrev: lastItem?.id || null })
+            scrollToBottom();
+          }}>
+           Adicionar Tarefa
+          </button>
        </SortableContext>
 
        {createPortal(
@@ -124,7 +163,7 @@ export function Sortable(props: SortableProps) {
             {activeItem && (
                <SortableItem
                 task={activeItem}
-                handleCheckboxChange={handleCheckboxChange}
+                handleUpdateTask={handleUpdateTask}
                 handleDelete={handleDelete}
                />
             )}
