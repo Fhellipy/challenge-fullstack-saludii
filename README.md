@@ -1,50 +1,75 @@
-# README
+# Desafio Full-Stack: Lista de Tarefas
 
-Welcome to [RedwoodJS](https://redwoodjs.com)!
+## Requisitos
 
-> **Prerequisites**
+Neste desafio, você irá construir um app web de uma aplicação de lista de tarefas. Nesse desafio, você deve utilizar as seguintes tecnologias:
+
+- RedwoodJS
+- Material UI (@mui/material)
+- dndkit
+- tiptap (ou uma biblioteca similar)
+- socket.IO ou SSE
+
+
+## Instruções de entrega
+
+Você deve subir o código fonte em um repositório git privado e adicionar o usuário `@matheusAle` como um colaborador.
+
+
+## Desafio
+
+Este aplicativo tem como objetivo permitir que os usuários gerenciem suas tarefas diárias, podendo adicioná-las, atualizá-las, marcá-las como concluídas e excluí-las conforme necessário. Cada tarefa deve ter um texto descritivo e um status indicando se está pendente ou concluída bem como a data de quando foi criada e a data de da ultima modificação, caso tenha sido editada.
+
+Todas as tarefas cadastradas são públicas, portanto, qualquer pessoa pode criar ou mudar algo na lista de tarefas. Para uma melhor experiência, devemos replicar qualquer atualização nas tarefas para todos os usuários conectados.
+
+### Funcionalidades
+
+- Lista de Tarefas: Permite que o usuário veja todas as suas tarefas cadastradas. Deve mostrar o conteúdo bem como o status dessa tarefa.
+- Filtrar Lista de Tarefas: Permite que o usuário visualize apenas as tarefas marcadas como concluídas.
+- Criar Tarefa: O usuário pode criar uma nova tarefa. O conteúdo da tarefa pode ser em markdown suportando links, títulos, texto em itálico e negrito.
+- Editar Tarefa: O usuário pode dar dois cliques em qualquer tarefa na lista e editar o seu conteúdo.
+- Reordenar Tarefas: O usuário é livre para ordenar as tarefas como bem entender utilizando drag and drop.
+
+### Instruções Gerais
+
+- O campo de texto para criar/editar uma tarefa deve suportar edição de texto. Utilize o tiptap para implementar essas funcionalidades.
+- Você está livre para usar qualquer outra biblioteca React no seu projeto.
+- Você deve utilizar o máximo possível dos componentes e recursos do Material UI.
+- *Dica*: Não salve a ordem das tarefas como um valor inteiro sequencial. Use um float ou dê um intervalo numérico arbitrário entre a última tarefa e a nova.
+
+
+### Instruções para rodar o projeto
+
+> **Pré-requisitos**
 >
-> - Redwood requires [Node.js](https://nodejs.org/en/) (=20.x) and [Yarn](https://yarnpkg.com/)
-> - Are you on Windows? For best results, follow our [Windows development setup](https://redwoodjs.com/docs/how-to/windows-development-setup) guide
+> - Redwood requer [Node.js](https://nodejs.org/en/) (=20.x) and [Yarn](https://yarnpkg.com/)
 
-Start by installing dependencies:
+
+Comece instalando as dependências:
 
 ```
-yarn install
+yarn add
 ```
 
-Then start the development server:
+Em seguida, inicie o servidor de desenvolvimento:
 
 ```
 yarn redwood dev
 ```
 
-Your browser should automatically open to [http://localhost:8910](http://localhost:8910) where you'll see the Welcome Page, which links out to many great resources.
-
-> **The Redwood CLI**
->
-> Congratulations on running your first Redwood CLI command! From dev to deploy, the CLI is with you the whole way. And there's quite a few commands at your disposal:
->
-> ```
-> yarn redwood --help
-> ```
->
-> For all the details, see the [CLI reference](https://redwoodjs.com/docs/cli-commands).
+Seu navegador deve abrir automaticamente em http://localhost:8910, onde você verá a página com o To-do-list.
 
 ## Prisma and the database
 
-Redwood wouldn't be a full-stack framework without a database. It all starts with the schema. Open the [`schema.prisma`](api/db/schema.prisma) file in `api/db` and replace the `UserExample` model with the following `Post` model:
+Primeiro crie um arquivo ```.env``` no seu projeto e adicione essas duas variáveis de ambiente com as credencias para o seu banco de dados.
 
-```prisma
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  body      String
-  createdAt DateTime @default(now())
-}
+```
+DATABASE_URL=file:./dev.db
+SESSION_SECRET=file:**************
 ```
 
-Redwood uses [Prisma](https://www.prisma.io/), a next-gen Node.js and TypeScript ORM, to talk to the database. Prisma's schema offers a declarative way of defining your app's data models. And Prisma [Migrate](https://www.prisma.io/migrate) uses that schema to make database migrations hassle-free:
+
+E para evitar problemas com as migrações dos bancos, use o schema do  [Prisma](https://www.prisma.io/) [Migrate](https://www.prisma.io/migrate) para faze-lás livremente.
 
 ```
 yarn rw prisma migrate dev
@@ -54,69 +79,6 @@ yarn rw prisma migrate dev
 ? Enter a name for the new migration: › create posts
 ```
 
-> `rw` is short for `redwood`
+> `rw` é uma abreviação para `redwood`
 
-You'll be prompted for the name of your migration. `create posts` will do.
-
-Now let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on our `Post` model:
-
-```
-yarn redwood generate scaffold post
-```
-
-Navigate to [http://localhost:8910/posts/new](http://localhost:8910/posts/new), fill in the title and body, and click "Save".
-
-Did we just create a post in the database? Yup! With `yarn rw generate scaffold <model>`, Redwood created all the pages, components, and services necessary to perform all CRUD actions on our posts table.
-
-## Frontend first with Storybook
-
-Don't know what your data models look like? That's more than ok—Redwood integrates Storybook so that you can work on design without worrying about data. Mockup, build, and verify your React components, even in complete isolation from the backend:
-
-```
-yarn rw storybook
-```
-
-Seeing "Couldn't find any stories"? That's because you need a `*.stories.{tsx,jsx}` file. The Redwood CLI makes getting one easy enough—try generating a [Cell](https://redwoodjs.com/docs/cells), Redwood's data-fetching abstraction:
-
-```
-yarn rw generate cell examplePosts
-```
-
-The Storybook server should hot reload and now you'll have four stories to work with. They'll probably look a little bland since there's no styling. See if the Redwood CLI's `setup ui` command has your favorite styling library:
-
-```
-yarn rw setup ui --help
-```
-
-## Testing with Jest
-
-It'd be hard to scale from side project to startup without a few tests. Redwood fully integrates Jest with both the front- and back-ends, and makes it easy to keep your whole app covered by generating test files with all your components and services:
-
-```
-yarn rw test
-```
-
-To make the integration even more seamless, Redwood augments Jest with database [scenarios](https://redwoodjs.com/docs/testing#scenarios)  and [GraphQL mocking](https://redwoodjs.com/docs/testing#mocking-graphql-calls).
-
-## Ship it
-
-Redwood is designed for both serverless deploy targets like Netlify and Vercel and serverful deploy targets like Render and AWS:
-
-```
-yarn rw setup deploy --help
-```
-
-Don't go live without auth! Lock down your app with Redwood's built-in, database-backed authentication system ([dbAuth](https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third-party auth providers:
-
-```
-yarn rw setup auth --help
-```
-
-## Next Steps
-
-The best way to learn Redwood is by going through the comprehensive [tutorial](https://redwoodjs.com/docs/tutorial/foreword) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
-
-## Quick Links
-
-- Stay updated: read [Forum announcements](https://community.redwoodjs.com/c/announcements/5), follow us on [Twitter](https://twitter.com/redwoodjs), and subscribe to the [newsletter](https://redwoodjs.com/newsletter)
-- [Learn how to contribute](https://redwoodjs.com/docs/contributing)
+Agora é só aproveitar dessa aplicação!
