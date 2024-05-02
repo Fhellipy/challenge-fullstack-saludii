@@ -9,7 +9,7 @@ import { SortableItem } from "./SortableItem";
 type SortableProps = {
   tasks: TasksQuery['tasks'];
   handleCreateTask: (input: CreateTaskInput) => void;
-  handleUpdateTask: (id: string, input: UpdateTaskInput) => void;
+  handleUpdateTask: (id: string, input: UpdateTaskInput, emitForMe?: boolean) => void;
   handleUpdatePositionTasks: (tasks: {id: string, taskIdPrev: string}[]) => void;
   handleDelete: (id: string) => void;
 };

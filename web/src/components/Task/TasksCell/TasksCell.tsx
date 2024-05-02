@@ -42,8 +42,8 @@ export const Success = ({ tasks }: CellSuccessProps<TasksQuery, TasksQueryVariab
     socket.emit('createTask', { input })
   }
 
-  const handleUpdateTask = (id: string, input: UpdateTaskInput) => {
-    socket.emit('updateTask', { id, input })
+  const handleUpdateTask = (id: string, input: UpdateTaskInput, emitForMe?: boolean) => {
+    socket.emit('updateTask', { id, input, emitForMe })
   }
 
   const handleUpdatePositionTasks = (tasks: { id: string, taskIdPrev: string | null }[]) => {

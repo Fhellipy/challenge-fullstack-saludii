@@ -31,6 +31,14 @@ type EditorProps = {
   placeholder: string;
 }
 
+export function removeHTMLTags(str: string) {
+  const checkboxComponent = str.includes('data-type="taskList"')
+
+  if(checkboxComponent) return str;
+
+  return str.replace(/<(?!img\s)[^>]+>/g, "");
+}
+
 export function Editor({ initialContent, placeholder, onChange } : EditorProps ) {
   const [editable, setEditable] = useState(false);
   const [change, setChange] = useState(false);
@@ -38,14 +46,6 @@ export function Editor({ initialContent, placeholder, onChange } : EditorProps )
 
   const [content, setContent] = useState("");
   const contentDebounce = useDebounce(setContent, 1500);
-
-  function removeHTMLTags(str: string) {
-    const checkboxComponent = str.includes('data-type="taskList"')
-
-    if(checkboxComponent) return str;
-
-    return str.replace(/<(?!img\s)[^>]+>/g, "");
-  }
 
   useEffect(() => {
     if(change) {
