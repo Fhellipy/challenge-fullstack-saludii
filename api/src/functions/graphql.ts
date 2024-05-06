@@ -38,10 +38,7 @@ io.on('connection', (socket) => {
 
     const allTasks = await tasks({ status: 'ALL' })
 
-    if(task.emitForMe) {
-      socket.emit('allTask', allTasks)
-    }
-
+    socket.emit('allTask', allTasks)
     socket.broadcast.emit('allTask', allTasks)
   })
 

@@ -3,12 +3,12 @@ import { CSS } from "@dnd-kit/utilities";
 import { Checkbox, IconButton } from "@mui/material";
 import { GripVerticalIcon, TrashIcon } from "lucide-react";
 import { TasksQuery, UpdateTaskInput } from "types/graphql";
-import { Editor, removeHTMLTags } from "../Editor/Editor";
+import { Editor } from "../Editor/Editor";
 
 
 type SortableItemProps = {
   task: TasksQuery['tasks'][number];
-  handleUpdateTask: (id: string, input: UpdateTaskInput, emitForMe?: boolean) => void;
+  handleUpdateTask: (id: string, input: UpdateTaskInput) => void;
   handleDelete: (id: string) => void;
 };
 
@@ -68,9 +68,7 @@ export function SortableItem(props: SortableItemProps) {
                  title: content
                }
 
-               const haveContent = removeHTMLTags(content).length > 0;
-
-               handleUpdateTask(task.id, input, !haveContent)
+               handleUpdateTask(task.id, input)
              }}
            />
 
@@ -84,7 +82,7 @@ export function SortableItem(props: SortableItemProps) {
                 status: ev.target.checked ? 'COMPLETED' : 'PENDING'
               }
 
-              handleUpdateTask(task.id, input, true)
+              handleUpdateTask(task.id, input)
             }}
           />
           <label htmlFor={task.id} className="truncate">
@@ -101,9 +99,7 @@ export function SortableItem(props: SortableItemProps) {
             description: content
           }
 
-          const haveContent = removeHTMLTags(content).length > 0;
-
-          handleUpdateTask(task.id, input, !haveContent)
+          handleUpdateTask(task.id, input)
         }}
       />
     </li>
